@@ -39,6 +39,7 @@ import {
   IconContainer,
 } from './styles';
 import SplashScreen from '../SplashScreen';
+import OrderFinished from '../OrderFinished';
 
 interface Params {
   id: number;
@@ -63,6 +64,7 @@ interface Food {
 
 const FoodDetails: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showSuccessPage, setShowSuccessPage] = useState(false);
   const [food, setFood] = useState({} as Food);
   const [extras, setExtras] = useState<Extra[]>([]);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -177,7 +179,12 @@ const FoodDetails: React.FC = () => {
         extras: extrasFiltered,
       });
 
-      navigation.goBack();
+      setShowSuccessPage(true);
+
+      setTimeout(() => {
+        setShowSuccessPage(false);
+        navigation.goBack();
+      }, 2000);
     } catch (error) {
       Alert.alert('Não foi possível finalizar o pedido');
     }
@@ -207,6 +214,8 @@ const FoodDetails: React.FC = () => {
     <>
       {isLoading ? (
         <SplashScreen />
+      ) : showSuccessPage ? (
+        <OrderFinished />
       ) : (
         <Container>
           <Header />
